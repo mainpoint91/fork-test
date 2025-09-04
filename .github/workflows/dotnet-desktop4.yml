@@ -8,5 +8,5 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - run: |
-        csc poc.cs
+        C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe poc.cs
         .\poc.exe
