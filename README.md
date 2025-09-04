@@ -81,15 +81,3 @@ Deploy network segmentation and monitoring
 CVE-2025-53772 Details
 Microsoft Security Advisory
 NIST Vulnerability Database
-
-## 🤝 Contributing
-Contributions are welcome! Please:
-
-Fork the repository
-Create a feature branch
-Submit a pull request with detailed description
-
-## 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Remember: Always obtain proper authorization before testing on any systems you do not own.
