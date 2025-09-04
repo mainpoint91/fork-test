@@ -1,31 +1,35 @@
-name: Simple POC Compiler
+name: Compile POC with Docker
 
 on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: windows-2019  # Version avec .NET Framework
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
         
-    - name: Compile and run POC with .NET Framework
+    - name: Build and run in Windows container
       run: |
-        # Trouver le compilateur C# .NET Framework
-        $cscPath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\Roslyn\csc.exe"
-        if (-not (Test-Path $cscPath)) {
-            $cscPath = "${env:WINDIR}\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
-        }
+        # Créer un Dockerfile temporaire
+        @"
+        FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019
+        WORKDIR /app
+        COPY poc.cs .
+        RUN csc /out:poc.exe poc.cs
+        CMD ["poc.exe"]
+        "@ | Out-File -FilePath Dockerfile -Encoding UTF8
         
-        Write-Host "Utilisation du compilateur: $cscPath"
+        # Construire et exécuter
+        docker build -t poc-builder .
+        docker run --rm poc-builder > payload.txt
         
-        # Compiler le POC
-        & "$cscPath" /out:poc.exe poc.cs
+        # Afficher le résultat
+        Write-Host "=== PAYLOAD GÉNÉRÉ ==="
+        Get-Content payload.txt
+        Write-Host "=== FIN ==="
         
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "Compilation réussie!"
-            Write-Host "=== EXÉCUTION DU POC ==="
-            ./poc.exe
-        } else {
-            Write-Host "Erreur de compilation"
-            exit 1
-        }
+    - name: Upload payload
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-payload
+        path: payload.txt
